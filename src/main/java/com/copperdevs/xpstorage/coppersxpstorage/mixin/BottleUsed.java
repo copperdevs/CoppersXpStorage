@@ -6,6 +6,8 @@ import net.minecraft.item.GlassBottleItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
@@ -38,6 +40,9 @@ public class BottleUsed {
             if (!wasAdded) {
                 serverUser.dropItem(bottle, false);
             }
+
+            float f = serverUser.experienceLevel > 30 ? 1.0f : (float)serverUser.experienceLevel / 30.0f;
+            serverUser.playSoundToPlayer(SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, f * 0.25f, 0.625f);
         }
     }
 }
