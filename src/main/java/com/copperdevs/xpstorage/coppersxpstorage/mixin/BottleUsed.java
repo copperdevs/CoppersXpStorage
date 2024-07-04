@@ -22,8 +22,9 @@ public class BottleUsed {
     @Inject(at = @At("HEAD"), method = "use")
     private void injected(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir) {
         if (!CoppersXpStorage.CONFIG.enabled || world.isClient) return;
-        if (CoppersXpStorage.CONFIG.usage == ConfigData.BottleUsage.RightClick && user.isSneaking()) return;
-        if (CoppersXpStorage.CONFIG.usage == ConfigData.BottleUsage.SneakRightClick && !user.isSneaking()) return;
+        if (!CoppersXpStorage.CONFIG.sneakingRequired && user.isSneaking()) return;
+        if (CoppersXpStorage.CONFIG.sneakingRequired && !user.isSneaking()) return;
+
 
         if ((user.experienceLevel + user.experienceProgress) >= CoppersXpStorage.CONFIG.bottlingConsumption) {
 
