@@ -3,12 +3,12 @@ package com.copperdevs.xpstorage.coppersxpstorage;
 import com.copperdevs.xpstorage.coppersxpstorage.config.ConfigData;
 import com.copperdevs.xpstorage.coppersxpstorage.config.ConfigManager;
 
-import com.mojang.brigadier.arguments.BoolArgumentType;
-import com.mojang.brigadier.arguments.FloatArgumentType;
-import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.minecraft.text.ClickEvent;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
 import static net.minecraft.server.command.CommandManager.*;
@@ -25,61 +25,33 @@ public class CoppersXpStorage implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        if (ConfigManager.ConfigFileExists()) CONFIG = ConfigManager.Load();
-        else ConfigManager.Save(CONFIG);
-
-        LoadCommand();
+        loadConfig();
+        loadCommands();
     }
 
-    private void LoadCommand() {
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(literal("copperdevs").executes(context -> {
+    private void loadConfig() {
+        if (ConfigManager.ConfigFileExists())
+            CONFIG = ConfigManager.Load();
+        else
+            ConfigManager.Save(CONFIG);
+    }
 
-            context.getSource().sendFeedback(() -> Text.of("https://www.github.com/copperdevs/"), true);
+    private MutableText getLinkMessage(String link) {
+        return getLinkMessage(link, link);
+    }
 
-            return 1;
-        })));
+    private MutableText getLinkMessage(String message, String link) {
+        return Text.literal(message).styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, link)).withFormatting(Formatting.UNDERLINE));
+    }
 
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(literal("copperdevs").then(literal("coppersxpstorage").executes(context -> {
+    private void loadCommands() {
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(literal("copperdevs")
+                .then(literal("xpstorage").then(literal("config").then(literal("reload").requires(source -> source.hasPermissionLevel(4)).executes(context -> {
+                    loadConfig();
+                    context.getSource().sendFeedback(() -> Text.literal("Reloading config"), true);
 
-            context.getSource().sendFeedback(() -> Text.literal("coppersxpstorage"), true);
-
-            return 1;
-        }))));
-
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(literal("copperdevs").then(literal("coppersxpstorage").then(literal("config").executes(context -> {
-
-            context.getSource().sendFeedback(() -> Text.literal("Called /foo with no arguments"), true);
-
-            return 1;
-        })))));
-
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(literal("copperdevs").then(literal("coppersxpstorage").then(literal("config").then(literal("reload").executes(context -> {
-
-            context.getSource().sendFeedback(() -> Text.literal("Called foo with bar"), true);
-
-            return 1;
-        }))))));
-
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(literal("copperdevs").then(literal("coppersxpstorage").then(literal("config").then(literal("enabled").then(argument("value", BoolArgumentType.bool()).executes(context -> {
-
-            context.getSource().sendFeedback(() -> Text.literal("Called foo with bar"), true);
-
-            return 1;
-        })))))));
-
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(literal("copperdevs").then(literal("coppersxpstorage").then(literal("config").then(literal("bottlingConsumption").then(argument("value", FloatArgumentType.floatArg()).executes(context -> {
-
-            context.getSource().sendFeedback(() -> Text.literal("Called foo with bar"), true);
-
-            return 1;
-        })))))));
-
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(literal("copperdevs").then(literal("coppersxpstorage").then(literal("config").then(literal("sneakingrequired").then(argument("value", BoolArgumentType.bool()).executes(context -> {
-
-            context.getSource().sendFeedback(() -> Text.literal("Called foo with bar"), true);
-
-            return 1;
-        })))))));
+                    return 1;
+                }))))));
     }
 
     public static Identifier id(String id) {
