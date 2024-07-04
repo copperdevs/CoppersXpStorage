@@ -2,17 +2,20 @@
   "schemaVersion": 1,
   "id": "coppersxpstorage",
   "version": "${version}",
-  "name": "CoppersXpStorage",
-  "description": "",
+  "name": "Copper's Xp Storage",
+  "description": "Simple serverside mod to allow bottling xp into experience bottles",
   "authors": [
     "copperdevs"
   ],
   "contact": {
-    "repo": "https://github.com/copperdevs/CoppersXpStorage"
+    "homepage": "https://github.com/copperdevs/CoppersXpStorage",
+    "repo": "https://github.com/copperdevs/CoppersXpStorage",
+    "sources": "https://github.com/copperdevs/CoppersXpStorage",
+    "issues": "https://github.com/copperdevs/CoppersXpStorage/issues"
   },
   "license": "MIT",
   "icon": "assets/coppersxpstorage/icon.png",
-  "environment": "server",
+  "environment": "*",
   "entrypoints": {
     "main": [
       "com.copperdevs.xpstorage.coppersxpstorage.CoppersXpStorage"
