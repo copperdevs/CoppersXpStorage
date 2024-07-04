@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "coppersxpstorage",
+  "version": "${version}",
+  "name": "CoppersXpStorage",
+  "description": "",
+  "authors": [
+    "copperdevs"
+  ],
+  "contact": {
+    "repo": "https://github.com/copperdevs/CoppersXpStorage"
+  },
+  "license": "MIT",
+  "icon": "assets/coppersxpstorage/icon.png",
+  "environment": "server",
+  "entrypoints": {
+    "main": [
+      "com.copperdevs.xpstorage.coppersxpstorage.CoppersXpStorage"
+    ]
+  },
+  "mixins": [
+    "coppersxpstorage.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
