@@ -1,6 +1,7 @@
 package com.copperdevs.xpstorage.coppersxpstorage.mixin;
 
 import com.copperdevs.xpstorage.coppersxpstorage.CoppersXpStorage;
+import com.copperdevs.xpstorage.coppersxpstorage.config.ConfigData;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.GlassBottleItem;
 import net.minecraft.item.ItemStack;
@@ -20,14 +21,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class BottleUsed {
     @Inject(at = @At("HEAD"), method = "use")
     private void injected(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir) {
-        if (!user.isSneaking() || world.isClient)
-            return;
+        if (!CoppersXpStorage.CONFIG.enabled || world.isClient) return;
+        if (CoppersXpStorage.CONFIG.usage == ConfigData.BottleUsage.RightClick && user.isSneaking()) return;
+        if (CoppersXpStorage.CONFIG.usage == ConfigData.BottleUsage.SneakRightClick && !user.isSneaking()) return;
 
-        if ((user.experienceLevel + user.experienceProgress) >= CoppersXpStorage.BottleXpConsumption) {
+        if ((user.experienceLevel + user.experienceProgress) >= CoppersXpStorage.CONFIG.bottlingConsumption) {
 
             var serverUser = (ServerPlayerEntity) user;
 
-            serverUser.addExperience((int)(CoppersXpStorage.BottleXpConsumption * -10));
+            serverUser.addExperience((int) (CoppersXpStorage.CONFIG.bottlingConsumption * -10));
 
             serverUser.getMainHandStack().decrement(1);
 
@@ -41,7 +43,7 @@ public class BottleUsed {
                 serverUser.dropItem(bottle, false);
             }
 
-            float f = serverUser.experienceLevel > 30 ? 1.0f : (float)serverUser.experienceLevel / 30.0f;
+            float f = serverUser.experienceLevel > 30 ? 1.0f : (float) serverUser.experienceLevel / 30.0f;
             serverUser.playSoundToPlayer(SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, f * 0.25f, 0.625f);
         }
     }
