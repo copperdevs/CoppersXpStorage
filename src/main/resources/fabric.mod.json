@@ -18,7 +18,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.copperdevs.xpstorage.coppersxpstorage.CoppersXpStorage"
+      "com.copperdevs.mods.coppersxpstorage.CoppersXpStorage"
     ]
   },
   "mixins": [

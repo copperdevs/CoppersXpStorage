@@ -1,6 +1,6 @@
-package com.copperdevs.xpstorage.coppersxpstorage.mixin;
+package com.copperdevs.mods.coppersxpstorage.mixin;
 
-import com.copperdevs.xpstorage.coppersxpstorage.CoppersXpStorage;
+import com.copperdevs.mods.coppersxpstorage.CoppersXpStorage;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.GlassBottleItem;
 import net.minecraft.item.ItemStack;

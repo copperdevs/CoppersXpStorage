@@ -1,4 +1,4 @@
-package com.copperdevs.xpstorage.coppersxpstorage.config;
+package com.copperdevs.mods.coppersxpstorage.config;
 
 import com.google.gson.Gson;
 

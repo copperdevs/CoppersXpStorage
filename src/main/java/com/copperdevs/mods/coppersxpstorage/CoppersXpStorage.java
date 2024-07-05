@@ -1,7 +1,7 @@
-package com.copperdevs.xpstorage.coppersxpstorage;
+package com.copperdevs.mods.coppersxpstorage;
 
-import com.copperdevs.xpstorage.coppersxpstorage.config.ConfigData;
-import com.copperdevs.xpstorage.coppersxpstorage.config.ConfigManager;
+import com.copperdevs.mods.coppersxpstorage.config.ConfigData;
+import com.copperdevs.mods.coppersxpstorage.config.ConfigManager;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
