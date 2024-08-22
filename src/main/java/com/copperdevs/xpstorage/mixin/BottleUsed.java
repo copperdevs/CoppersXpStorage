@@ -1,6 +1,6 @@
-package com.copperdevs.mods.coppersxpstorage.mixin;
+package com.copperdevs.xpstorage.mixin;
 
-import com.copperdevs.mods.coppersxpstorage.CoppersXpStorage;
+import com.copperdevs.xpstorage.CoppersXpStorage;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.GlassBottleItem;
 import net.minecraft.item.ItemStack;
@@ -20,15 +20,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class BottleUsed {
     @Inject(at = @At("HEAD"), method = "use")
     private void injected(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir) {
-        if (!CoppersXpStorage.CONFIG.enabled || world.isClient || user.isCreative()) return;
-        if (!CoppersXpStorage.CONFIG.sneakingRequired && user.isSneaking()) return;
-        if (CoppersXpStorage.CONFIG.sneakingRequired && !user.isSneaking()) return;
+        if (!CoppersXpStorage.getEnabledConfig() || world.isClient || user.isCreative()) return;
+        if (!CoppersXpStorage.getSneakingRequiredConfig() && user.isSneaking()) return;
+        if (CoppersXpStorage.getSneakingRequiredConfig() && !user.isSneaking()) return;
 
-        if ((user.experienceLevel + user.experienceProgress) >= CoppersXpStorage.CONFIG.bottlingConsumption) {
+        if ((user.experienceLevel + user.experienceProgress) >= CoppersXpStorage.getBottleConsumption()) {
 
             var serverUser = (ServerPlayerEntity) user;
 
-            serverUser.addExperience((int) (CoppersXpStorage.CONFIG.bottlingConsumption * -10));
+            var xpAdded = (CoppersXpStorage.getBottleConsumption() * -10);
+            serverUser.addExperience((int) xpAdded);
 
             serverUser.getMainHandStack().decrement(1);
 

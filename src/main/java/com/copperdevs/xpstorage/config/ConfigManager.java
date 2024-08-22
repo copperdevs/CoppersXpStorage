@@ -1,5 +1,6 @@
-package com.copperdevs.mods.coppersxpstorage.config;
+package com.copperdevs.xpstorage.config;
 
+import com.copperdevs.xpstorage.CoppersXpStorage;
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -16,20 +17,26 @@ public class ConfigManager {
     }
 
     public static ConfigData Load() {
+        var configFile = new File(PATH);
 
-        try (FileReader reader = new FileReader(PATH)) {
-            return gson.fromJson(reader, ConfigData.class);
-        } catch (IOException ignored) {
+        if (configFile.exists() && configFile.canRead()) {
+            try (FileReader reader = new FileReader(PATH)) {
+                return gson.fromJson(reader, ConfigData.class);
+            } catch (IOException e) {
+                CoppersXpStorage.LOGGER.error(e.getMessage());
+            }
         }
 
-        return new ConfigData();
+        var newConfig = new ConfigData();
+        Save(newConfig);
+        return newConfig;
     }
 
     public static void Save(ConfigData data) {
         try (FileWriter writer = new FileWriter(PATH)) {
             writer.write(gson.toJson(data));
         } catch (IOException e) {
-            e.printStackTrace();
+            CoppersXpStorage.LOGGER.error(e.getMessage());
         }
     }
 }

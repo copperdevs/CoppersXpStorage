@@ -1,7 +1,7 @@
-package com.copperdevs.mods.coppersxpstorage;
+package com.copperdevs.xpstorage;
 
-import com.copperdevs.mods.coppersxpstorage.config.ConfigData;
-import com.copperdevs.mods.coppersxpstorage.config.ConfigManager;
+import com.copperdevs.xpstorage.config.ConfigData;
+import com.copperdevs.xpstorage.config.ConfigManager;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -17,7 +17,10 @@ public class CoppersXpStorage implements ModInitializer {
     public static final String MOD_ID = "coppersxpstorage";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-    public static ConfigData CONFIG = new ConfigData();
+    private static ConfigData CONFIG = new ConfigData();
+
+    private static final float bottlingConsumptionMinRange = 0f;
+    private static final float bottlingConsumptionMaxRange = 1f;
 
     @Override
     public void onInitialize() {
@@ -37,5 +40,18 @@ public class CoppersXpStorage implements ModInitializer {
 
             return 1;
         }))))));
+    }
+
+    public static float getBottleConsumption() {
+        if (CoppersXpStorage.CONFIG.bottlingConsumption >= CoppersXpStorage.bottlingConsumptionMaxRange) return CoppersXpStorage.bottlingConsumptionMaxRange;
+        return Math.max(CoppersXpStorage.bottlingConsumptionMinRange, CoppersXpStorage.CONFIG.bottlingConsumption);
+    }
+
+    public static boolean getEnabledConfig() {
+        return CoppersXpStorage.CONFIG.enabled;
+    }
+
+    public static boolean getSneakingRequiredConfig() {
+        return CoppersXpStorage.CONFIG.sneakingRequired;
     }
 }
